@@ -41,7 +41,7 @@ This library provides a full feautured framework for development of serverless m
  7. Upload data folder to the device: 'Upload File System Image' Task in PlatformIO. This step required only at the beginning
  8. Define SETTINGS_PIN & SETTINGS_LED values in main.cpp (**before** any GoFarmTech library include file) for Maintencance Knob & Led definition
  9. Include library files and define the device main class with the device logic
- 10. See example for the reference
+ 10. See [example](examples/main.cpp) for the reference
  11. Compile and upload your project to the device
  12. Open the serial port console and check the runtime logs
  13. Press for few secconds the Maintenace Knob attached to the SETTINGS_PIN, the SETTINGS_LED led should flare up
