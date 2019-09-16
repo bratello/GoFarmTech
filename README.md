@@ -1,6 +1,6 @@
 # GoFarmTech Arduino based Framework for developing agriculture/industry process automation device.
 
-This library provides a full feautured framework for development of serverless multifunction controller which able to controll process in unstable network connection environment. In some of the industry processes the price of network failure is very high - e.g. watering process in agriculture. So the device should be able to handle process independently from server, but allow to communicate with the MQTT server when it's possible. The main keys of the framework:
+This library provides a full feautured framework for development of serverless multifunction controller which able to controll process in unstable network connection environment. In some of the industry processes the cost of network failure is very high - e.g. watering process in agriculture. So the device should be able to handle process independently from server, but allow to communicate with the MQTT server when it's possible. The main keys of the framework:
 
  - Set of the sensor and relay classes are ready to use
  - Simple sensor registration (see example)
@@ -53,7 +53,7 @@ This library provides a full feautured framework for development of serverless m
  19. Add GoFarmTech entry to the lib_deps key in platformio.ini file
 
 ## Known limitation
-The Framework was tested on esp8266 platform only. Please open the issue in case of some questions or trobles, I'll answer as soon as I can. Feel free to modify this code, apply logs or implement our own sensors - any help is welcomed.
+The Framework was tested on esp8266 platform only. Please open the issue in case of some questions or troubles, I'll answer as soon as I can. Feel free to modify this code, apply logs or implement our own sensors - any help is welcomed.
 
 ## Roadmap
  - esp32 support
