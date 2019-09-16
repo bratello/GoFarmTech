@@ -12,8 +12,8 @@ This library provides a full feautured framework for development of serverless m
  - Logging system for maintenance and diagnostics
 
 ## WebUI Screenshots
- - [Timer Settings](screenshots/timerSettingsUI.jpg)
- - [Global Settings](screenshots/globalSettingsUI.jpg)
+ - ![Timer Settings](screenshots/timerSettingsUI.jpg)
+ - ![Global Settings](screenshots/globalSettingsUI.jpg)
 
 ## Dependencies and Requirements
  1. [Time](http://playground.arduino.cc/code/time): the device time will be updated from Web UI or from ioBroker automatically
