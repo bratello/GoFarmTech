@@ -21,10 +21,10 @@ This library provides a full feautured framework for development of serverless m
  5. SPIFFS should be supported and available, in about 400K FS space is required.
 
 ## Build steps
- 1. Install all dependencies and requirements
+ 1. Create new project and install all dependencies and requirements
  2. Specify the data folder (data_dir in PlatformIO)
- 3. Create settings.txt & values.txt in data folder
- 4. Specify the following keys in settings.txt (without brackets or quotes, just a value after the equal sign)
+ 3. Create settings.txt & values.txt files in data folder
+ 4. Specify the following keys in settings.txt file (without brackets or quotes, just a value after the equal sign)
     * deviceId=[Your device ID e.g.IoTMyConditionTimer - this ID will be used as Maintenance WiFi HotSpot name and as the MQTT channel ID]
     * deviceUsr=[Empty for now, for future use]
     * devicePwd=[Empty for now, for future use]
@@ -37,8 +37,8 @@ This library provides a full feautured framework for development of serverless m
  5. values.txt file can be empty
  6. Map the GoFarmTech/src/web/build folder to the %your_project_dir%/data/web folder (just symlink or copy)
  7. Upload data folder to the device: 'Upload File System Image' Task in PlatformIO. This step required only at the beginning
- 8. Define SETTINGS_PIN & SETTINGS_LED values in main.cpp (**before** any GoFarmTech library include file) for Maintencance Knob & Led definition
- 9. Connect Knob and Led to the SETTINGS_PIN & SETTINGS_LED pins
+ 8. Define SETTINGS_KNOB & SETTINGS_LED values in main.cpp (**before** any GoFarmTech library include file) for Maintencance Knob & Led definition
+ 9. Connect Knob and Led to the SETTINGS_KNOB & SETTINGS_LED pins
  10. Include library files and define the device main class with the device logic
  11. Add GoFarmTech entry to the lib_deps key in platformio.ini file
  12. See [example](examples/main.cpp) for the reference
@@ -46,7 +46,7 @@ This library provides a full feautured framework for development of serverless m
  14. Open the serial port console and check the runtime logs
  
 ## Initial device setup 
- 1. Press for few seconds the Maintenace Knob attached to the SETTINGS_PIN, the SETTINGS_LED led should flare up
+ 1. Press for few seconds the Maintenace Knob attached to the SETTINGS_KNOB, the SETTINGS_LED led should flare up
  2. Open the WiFi settings on your smartphone and connect to the %deviceId% WiFi network (e.g. IoTMyConditionTimer)
  3. Wait for few seconds - the captive portal application will be opened
  ![Global Settings](screenshots/globalSettingsUI.jpg)

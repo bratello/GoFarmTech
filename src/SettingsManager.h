@@ -12,8 +12,8 @@
 #include    "MQTTClient.h"
 
 
-#ifndef SETTINGS_PIN
-    #define SETTINGS_PIN D3
+#ifndef SETTINGS_KNOB
+    #define SETTINGS_KNOB D3
 #endif
 #ifndef SETTINGS_LED
     #define SETTINGS_LED 2
@@ -36,7 +36,7 @@ protected:
     virtual		void	doLoop();
     void                handle();
 public:
-    SettingsManager(uint8_t leadPin = SETTINGS_LED, uint8_t switchPin = SETTINGS_PIN);
+    SettingsManager(uint8_t leadPin = SETTINGS_LED, uint8_t switchPin = SETTINGS_KNOB);
 
     virtual		void	setup();
     void        setDeviceDescriptor(Descriptable* device);

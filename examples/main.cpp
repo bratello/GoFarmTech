@@ -1,7 +1,7 @@
 #include  <Arduino.h>
 /*
 //Specify settings pins here
-#define SETTINGS_PIN D3
+#define SETTINGS_KNOB D3
 #define SETTINGS_LED 2
 */
 #include  <LogicalValue.h>
