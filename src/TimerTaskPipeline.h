@@ -19,7 +19,7 @@ typedef enum STEP_COMMAND {
 const   seconds_t           CONDITIONAT_STEP_DURATION = -1;
 const   seconds_t           FOLLOW_BY_TASK_DURATION = -2;
 
-class TimerTaskPipeline : public TimerTask {
+class TimerTaskPipeline : protected TimerTask {
     LOGGABLE_MODULE_ID(TimerTaskPipeline)
 public:
     typedef 
@@ -50,6 +50,7 @@ protected:
     seconds_t                   _stepStarted = 0;
     step_event_t                _onBeforeStepEvent = empty_step_event;
     step_event_t                _onAfterStepEvent = empty_step_event;
+    friend class TimerValue;
 protected:
     void    onStartTaskHandler();
     void    onEndTaskHandler();

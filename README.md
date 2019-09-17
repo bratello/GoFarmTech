@@ -12,10 +12,6 @@ This library provides a full feautured framework for development of serverless m
  - Ready to use inegration with ioBroker, which allows to controll and configure the device from the server: [ioBroker.gofarmtech](https://github.com/bratello/ioBroker.gofarmtech)
  - Logging system for maintenance and diagnostics
 
-## WebUI Screenshots
- - ![Timer Settings](screenshots/timerSettingsUI.jpg)
- - ![Global Settings](screenshots/globalSettingsUI.jpg)
-
 ## Dependencies and Requirements
  1. [Time](http://playground.arduino.cc/code/time): the device time will be updated from Web UI or from ioBroker automatically
  2. [DHT sensor library](https://github.com/adafruit/DHT-sensor-library)
@@ -41,17 +37,25 @@ This library provides a full feautured framework for development of serverless m
  6. Map the GoFarmTech/src/web/build folder to the %your_project_dir%/data/web folder (just symlink or copy)
  7. Upload data folder to the device: 'Upload File System Image' Task in PlatformIO. This step required only at the beginning
  8. Define SETTINGS_PIN & SETTINGS_LED values in main.cpp (**before** any GoFarmTech library include file) for Maintencance Knob & Led definition
- 9. Include library files and define the device main class with the device logic
- 10. See [example](examples/main.cpp) for the reference
- 11. Compile and upload your project to the device
- 12. Open the serial port console and check the runtime logs
- 13. Press for few secconds the Maintenace Knob attached to the SETTINGS_PIN, the SETTINGS_LED led should flare up
- 14. Open the WiFi settings on your smartphone and connect to the %deviceId% WiFi network (e.g. IoTMyConditionTimer)
- 15. Wait for few seconds - the captive portal application will be opened
- 16. Press the menu button and go to the Global Settings, specify the basic network configuration
- 17. Press Apply button: device will be configured with your settings, the captive portal will be closed automatically, the SETTINGS_LED will be flare down
- 18. Use the same method for the sensors configuration. Press Maintenace Knob at end of the configuration process, the Maintenance HotSpot will be clossed automatically
- 19. Add GoFarmTech entry to the lib_deps key in platformio.ini file
+ 9. Connect Knob and Led to the SETTINGS_PIN & SETTINGS_LED pins
+ 10. Include library files and define the device main class with the device logic
+ 11. Add GoFarmTech entry to the lib_deps key in platformio.ini file
+ 12. See [example](examples/main.cpp) for the reference
+ 13. Compile and upload your project to the device
+ 14. Open the serial port console and check the runtime logs
+ 
+## Initial device setup 
+ 1. Press for few seconds the Maintenace Knob attached to the SETTINGS_PIN, the SETTINGS_LED led should flare up
+ 2. Open the WiFi settings on your smartphone and connect to the %deviceId% WiFi network (e.g. IoTMyConditionTimer)
+ 3. Wait for few seconds - the captive portal application will be opened
+ ![Global Settings](screenshots/globalSettingsUI.jpg)
+ 4. Press the menu button and go to the Global Settings, specify the basic network configuration
+ 5. Press Apply button: device will be configured with your settings, the captive portal will be closed automatically, the SETTINGS_LED will be flare down
+ 6. Use the same method for the sensors or timer tasks configuration.
+ ![Timer Settings](screenshots/timerSettingsUI.jpg)
+ ![Sensor Settings](screenshots/sensorSettingsUI.jpg)
+ 7. Press Maintenace Knob at end of the configuration process, the Maintenance HotSpot will be clossed automatically
+ 
 
 ## Known limitation
 The Framework was tested on esp8266 platform only. Please open the issue in case of some questions or troubles, I'll answer as soon as I can. Feel free to modify this code, apply logs or implement our own sensors - any help is welcomed.
