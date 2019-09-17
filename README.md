@@ -1,7 +1,8 @@
 # GoFarmTech Arduino based Framework for developing agriculture/industry process automation device.
 
-This library provides a full feautured framework for development of serverless multifunction controller which able to controll process in unstable network connection environment. In some of the industry processes the cost of network failure is very high - e.g. watering process in agriculture. So the device should be able to handle process independently from server, but allow to communicate with the MQTT server when it's possible. The main keys of the framework:
+This library provides a full feautured framework for development of serverless multifunction controller which able to controll process in unstable network connection environment. In some of the industry processes the cost of network failure is very high - e.g. watering process in agriculture. So the device should be able to handle process independently from server, but allow to communicate with the MQTT server when it's possible. This project was implemented with support of company Agrosheriff LTD.
 
+## Main keys
  - Set of the sensor and relay classes are ready to use
  - Simple sensor registration (see [example](examples/main.cpp))
  - Framework examines every sensor and posts the value change to the MQTT server (if possible right now)
@@ -9,7 +10,7 @@ This library provides a full feautured framework for development of serverless m
  - Sensor supports min/max value limits and events when the value reaches the limits
  - Built in multitask timer with various task execution strategies for building correct device logic
  - Device can be configured through the Web UI independenty from the server (Initial network setup, sensor limits, value examination frequency, etc)
- - Ready to use integration with [ioBroker](https://www.iobroker.net/) home automation system, which allows to controll and configure the device from the server: [ioBroker.gofarmtech](https://github.com/bratello/ioBroker.gofarmtech)
+ - Ready to use integration with [ioBroker](https://www.iobroker.net/) home automation system, which allows to controll and configure the device from the server: [ioBroker.gofarmtech](https://github.com/bratello/ioBroker.gofarmtech) adapter
  - Logging system for maintenance and diagnostics
 
 ## Dependencies and Requirements
@@ -55,10 +56,10 @@ This library provides a full feautured framework for development of serverless m
  6. Use the same method for the sensors or timer tasks configuration.
  ![Timer Settings](screenshots/timerSettingsUI.jpg)
  ![Sensor Settings](screenshots/sensorSettingsUI.jpg)
- 7. Press Maintenace Knob at end of the configuration process, the Maintenance HotSpot will be clossed automatically
+ 7. Press Maintenace Knob at end of the configuration process, the Maintenance HotSpot will be closed automatically
  
 
-## Known limitation
+## Known limitations
 The Framework was tested on esp8266 platform only. Please open the issue in case of some questions or troubles, I'll answer as soon as I can. Feel free to modify this code, apply logs or implement your own sensors - any help is welcomed.
 
 ## Roadmap
