@@ -7,6 +7,7 @@ This library provides a full feautured framework for development of serverless m
  - Framework examines every sensor and posts the value change to the MQTT server (if possible right now)
  - Sensor supports the value change event for device logic implementation
  - Sensor supports min/max value limits and events when the value reaches the limits
+ - Built in multitask timer with various task execution strategies for building correct device logic
  - Device can be configured through the Web UI independenty from the server (Initial network setup, sensor limits, value examination frequency, etc)
  - Ready to use inegration with ioBroker, which allows to controll and configure the device from the server: [ioBroker.gofarmtech](https://github.com/bratello/ioBroker.gofarmtech)
  - Logging system for maintenance and diagnostics
