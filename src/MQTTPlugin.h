@@ -30,14 +30,15 @@ protected:
 //Runnable implementation
 protected:
 	virtual		void	doLoop();
-	virtual		void 	setupValues() = 0;
-	virtual		void 	setupValue(MQTTValueAbs& val);
+	virtual		void	setupValues() = 0;
+	virtual		void	setupValue(MQTTValueAbs& val);
 	virtual		void	setupTimer(Timer timer);
 	virtual		void	setupLogs();
-	virtual		void 	setupInfra();
+	virtual		void	setupInfra();
 	virtual		void	setupDeviceLogic();
-	virtual		void 	loopValues(time_t ticks);
+	virtual		void	loopValues(time_t ticks);
 	virtual		void	publishLastError();
+	virtual		void	setupNetworkAdminTask(Timer timer);
 public:
 	virtual		void	setup();
 

@@ -32,6 +32,7 @@ void MQTTPlugin::setup() {
 	LOGGER(info("Plugin setup"));
 	_values.clear();
 	setupTimer(_timer);
+	setupNetworkAdminTask(_timer);
 	setupValue(_timer);
 	setupValues();
 	setupInfra();
@@ -106,4 +107,21 @@ void	MQTTPlugin::publishLastError() {
 	if(isLastErrorAvailable()) {
 		_client->publish("LastError", fetchLastError());
 	}
+}
+
+void	MQTTPlugin::setupNetworkAdminTask(Timer timer) {
+	timer.on("netAdmin",{ 
+		{0, TIME_INTERVAL::DAY, 10, TIME_INTERVAL::MINUTE * 5, TimerSlot::ALL_DAYS, TimerSlot::ALL_MONTHS} 
+	}, [this] () {
+		if(!netManager.isConnected()) {
+			LOGGER(info("Restart network connection"))
+			netManager.disconnect(); 
+		}
+	}, [this] () {
+		if(!netManager.isConnected()) {
+			if(!netManager.connect()) {
+				info("Network still disconnected");
+			}
+		}
+	});
 }

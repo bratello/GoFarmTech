@@ -237,7 +237,6 @@ void MQTTClientImpl::setup() {
 
 void MQTTClientImpl::doLoop() {
 	if(!netManager.isConnected()) {
-		DOIT_ONCE(LOGGER(info("Network disconnected")); netManager.disconnect(); netManager.connect(), 300)
 		return;
 	}
 	if(!_mqttClient.connected()) {
