@@ -112,6 +112,7 @@ public:
 
 		Description skip = meta;
 		skip.setName(String("skipTime"));
+		skip.setType(Description::Type::number);
 		skip.setAccess(Description::Access::write);
 		skip.setValue(this->_skipTime);
 		skip.setDefaultValue(this->_skipTime);

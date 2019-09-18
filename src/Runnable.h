@@ -17,7 +17,7 @@ public:
 	Runnable();
 	virtual		~Runnable();
 	virtual		void	setup() = 0;
-	virtual		void	loop(time_t time = 0);
+	virtual		time_t	loop(time_t time = 0);
 };
 typedef std::unique_ptr<Runnable>	RunnablePtr;
 

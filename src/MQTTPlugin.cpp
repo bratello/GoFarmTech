@@ -4,6 +4,8 @@
 #include	"MQTTPlugin.h"
 #include	"NetworkManager.h"
 
+#define VERIFY_MIN_DELAY(exp) { auto skipTime = exp; if(minSkipTime == -1 || minSkipTime > skipTime) minSkipTime = skipTime; }
+
 MQTTPlugin::MQTTPlugin() : _client(0) {
 	_skipTime = 0;
 }
@@ -13,14 +15,15 @@ void MQTTPlugin::doLoop() {
 		LOGGER(error(1, "Initialize plugin first!"))
 		return;
 	}
-	_client->loop(_lastTime);
+	time_t minSkipTime = -1;
+	VERIFY_MIN_DELAY(_client->loop(_lastTime));
 	yield();
 	logMemUsage("is still available");
-	_settingsManager.loop(_lastTime);
+	VERIFY_MIN_DELAY(_settingsManager.loop(_lastTime));
 	yield();
-	loopValues(_lastTime);
-	if(!(millis() - _lastTime))
-		delay(25);
+	VERIFY_MIN_DELAY(loopValues(_lastTime));
+	if(minSkipTime > 0)
+		delay(minSkipTime < 1000 ? minSkipTime : 1000);
 }
 
 void MQTTPlugin::setup() {
@@ -95,12 +98,14 @@ void	MQTTPlugin::setupDeviceLogic() {
 	//Do nothing
 }
 
-void 	MQTTPlugin::loopValues(time_t ticks) {
+time_t 	MQTTPlugin::loopValues(time_t ticks) {
+	time_t minSkipTime = -1;
 	for(auto val : _values) {
 		::yield();
-		val->loop(ticks);
+		VERIFY_MIN_DELAY(val->loop(ticks));
 	}
 	publishLastError();
+	return minSkipTime;
 }
 
 void	MQTTPlugin::publishLastError() {

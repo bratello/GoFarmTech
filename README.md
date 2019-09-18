@@ -1,6 +1,6 @@
 # GoFarmTech Arduino based Framework for developing agriculture/industry process automation device.
 
-This library provides a full feautured framework for development of serverless multifunction controller which able to controll process in unstable network connection environment. In some of the industry processes the cost of network failure is very high - e.g. watering process in agriculture. So the device should be able to handle process independently from server, but allow to communicate with the MQTT server when it's possible. This project was implemented with support of company Agrosheriff LTD.
+This library provides a full feautured framework for development of serverless multifunction microcontroller which able to controll process in unstable network connection environment. In some of the industry processes the cost of network failure is very high - e.g. watering process in agriculture. So the device should be able to handle process independently from server, but allow to communicate with the MQTT server when it's possible. This project was implemented with support of company Agrosheriff LTD.
 
 ## Main keys
  - Set of the sensor and relay classes are ready to use
@@ -27,7 +27,7 @@ This library provides a full feautured framework for development of serverless m
  4. Specify the following keys in settings.txt file (without brackets or quotes, just a value after the equal sign)
     * deviceId=[Your device ID e.g.IoTMyConditionTimer - this ID will be used as Maintenance WiFi HotSpot name and as the MQTT channel ID]
     * deviceUsr=[Empty for now, for future use]
-    * devicePwd=[Empty for now, for future use]
+    * devicePwd=[Device Password for the maintenance]
     * ssid=[WiFi network name for ioBroker connection]
     * wifiPwd=[WiFi password]
     * mqttHost=[MQTT Broker IP e.g. 192.168.0.120]
@@ -47,7 +47,7 @@ This library provides a full feautured framework for development of serverless m
  
 ## Initial device setup 
  1. Press for few seconds the Maintenace Knob attached to the SETTINGS_KNOB, the SETTINGS_LED led should flare up
- 2. Open the WiFi settings on your smartphone and connect to the %deviceId% WiFi network (e.g. IoTMyConditionTimer)
+ 2. Open the WiFi settings on your smartphone and connect to the %deviceId% WiFi network (e.g. IoTMyConditionTimer). Specify %devicePwd% password for connecting to the device
  3. Wait for few seconds - the captive portal application will be opened
  ![Global Settings](screenshots/globalSettingsUI.jpg)
  4. Press the menu button and go to the Global Settings, specify the basic network configuration
@@ -64,7 +64,6 @@ The Framework was tested on esp8266 platform only. Please open the issue in case
 
 ## Roadmap
  - esp32 support
- - Device password protection (deviceUsr & devicePwd)
  - Encrypt username & passwords in settings.txt file
  - Provide support for other sensors
  - LoRaWAN support (?)

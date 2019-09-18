@@ -17,6 +17,8 @@
 #include <utility>
 #include <functional>
 
+#define SETTINGS_SKIP_TIME 250
+
 class AccessPoint : public Runnable, public Loggable {
     LOGGABLE(AccessPoint)
 protected:
@@ -51,7 +53,7 @@ protected:
 public:
 	virtual	void	setup();
 public:
-    void	loop(time_t time = 0);
+    time_t	loop(time_t time = 0);
 
     AccessPoint(Descriptable* device, MQTTClientTransmitter* client, uint8_t leadPin, const onCloseAPCallback_t& cb);
     virtual ~AccessPoint();
@@ -64,7 +66,7 @@ SettingsManager::SettingsManager(uint8_t leadPin, uint8_t switchPin) : _modeLead
                                                                         _deviceDescriptor(NULL),
                                                                         _client(NULL)
 {
-    this->_skipTime = 300;
+    this->_skipTime = SETTINGS_SKIP_TIME;
 }
 
 void SettingsManager::setDeviceDescriptor(Descriptable* device) {
@@ -94,7 +96,7 @@ void	SettingsManager::doLoop() {
         if(!_accessPoint) {
             _skipTime = 0;
             _accessPoint = std::move(RunnablePtr(new AccessPoint(_deviceDescriptor, _client, _modeLeadPin, [this] () {
-                _skipTime = 300;
+                _skipTime = SETTINGS_SKIP_TIME;
                 _apMode = false;
             })));
             _accessPoint->setup();
@@ -283,7 +285,8 @@ void AccessPoint::doJsonResponse(const String& data) {
     webServer.send(200, "application/json", data);
 }
 
-void AccessPoint::loop(time_t time) {
+time_t AccessPoint::loop(time_t time) {
     dnsServer.processNextRequest();
     webServer.handleClient();
+    return _skipTime;
 }
