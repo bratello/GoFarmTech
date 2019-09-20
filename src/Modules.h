@@ -24,6 +24,7 @@ enum class Modules {
     LogicalFlag,
     TimerValue,
     TimerTask,
+    SystemInfo,
     DHT11Value,
     SoilMoistureValue,
     TimerSlot,

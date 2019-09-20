@@ -16,6 +16,7 @@
 #include	"Settings.h"
 #include 	"MQTTClient.h"
 #include	"SettingsManager.h"
+#include	"SystemInfo.h"
 
 
 class MQTTPlugin : public Runnable, public Loggable, public Descriptable {
@@ -27,6 +28,7 @@ protected:
 
 	TimerValue			_timer;
 	SettingsManager		_settingsManager;
+	SystemInfo			_sysInfo;
 //Runnable implementation
 protected:
 	virtual		void	doLoop();

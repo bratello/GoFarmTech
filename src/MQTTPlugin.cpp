@@ -37,6 +37,7 @@ void MQTTPlugin::setup() {
 	setupTimer(_timer);
 	setupNetworkAdminTask(_timer);
 	setupValue(_timer);
+	setupValue(_sysInfo);
 	setupValues();
 	setupInfra();
 	setupDeviceLogic();
