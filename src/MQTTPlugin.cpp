@@ -59,13 +59,6 @@ Description MQTTPlugin::getDescription() {
 		Description item = (*it)->getDescription();
 		meta.addChild(item);
 	}
-	Description lastErrorMeta;
-	lastErrorMeta.setName("LastError");
-	lastErrorMeta.setDefaultValue(String(""));
-	lastErrorMeta.setValue(String(""));
-	lastErrorMeta.setAccess(Description::Access::read);
-	lastErrorMeta.setType(Description::Type::string);
-	meta.addAttribute(lastErrorMeta);
 	return meta;
 }
 
@@ -105,14 +98,7 @@ time_t 	MQTTPlugin::loopValues(time_t ticks) {
 		::yield();
 		VERIFY_MIN_DELAY(val->loop(ticks));
 	}
-	publishLastError();
 	return minSkipTime;
-}
-
-void	MQTTPlugin::publishLastError() {
-	if(isLastErrorAvailable()) {
-		_client->publish("LastError", fetchLastError());
-	}
 }
 
 void	MQTTPlugin::setupNetworkAdminTask(Timer timer) {

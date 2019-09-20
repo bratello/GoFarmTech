@@ -18,6 +18,10 @@ void  SystemInfo::doLoop() {
     UPDATE_VALUE(sdkVersion, String(ESP.getSdkVersion()))
     UPDATE_VALUE(sketchSize, ESP.getSketchSize())
     UPDATE_VALUE(flashSize, ESP.getFlashChipSize())
+    
+    if(isLastErrorAvailable()) {
+		_client->publish("LastError", fetchLastError());
+	}
 }
 
 void  SystemInfo::setup() {
@@ -97,7 +101,15 @@ Description SystemInfo::getDescription() {
     flash.setDefaultValue((long)flashSize);
     flash.setValue((long)flashSize); 
 
+    Description lastErrorMeta;
+	lastErrorMeta.setName("LastError");
+	lastErrorMeta.setDefaultValue(String(""));
+	lastErrorMeta.setValue(String(""));
+	lastErrorMeta.setAccess(Description::Access::read);
+	lastErrorMeta.setType(Description::Type::string);
+
     meta.addAttribute(skip);
+    meta.addAttribute(lastErrorMeta);
     meta.addAttribute(core);
     meta.addAttribute(full);
     meta.addAttribute(cpu);
