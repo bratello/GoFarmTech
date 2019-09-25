@@ -3,7 +3,7 @@
 #include   "SystemInfo.h"
 #include   "Settings.h"
 
-#define     UPDATE_VALUE(val, exp)  { auto newVal = exp; if(newVal != val) this->_client->publish(#val, val); }
+#define     UPDATE_VALUE(val, exp)  { auto newVal = exp; if(newVal != val) { val = newVal; this->_client->publish(#val, val); } }
 
 SystemInfo::SystemInfo() : MQTTValueAbs(), cpuFreqMHz(), freeHeap(), heapFragmentation(), sketchSize(), flashSize() {
     _skipTime = 10000;

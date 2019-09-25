@@ -105,12 +105,12 @@ void	MQTTPlugin::setupNetworkAdminTask(Timer timer) {
 	timer.on("netAdmin",{ 
 		{0, TIME_INTERVAL::DAY, 10, TIME_INTERVAL::MINUTE * 5, TimerSlot::ALL_DAYS, TimerSlot::ALL_MONTHS} 
 	}, [this] () {
-		if(!netManager.isConnected()) {
+		if(!netManager.isConnected() && !netManager.isSetupConnected()) {
 			LOGGER(info("Restart network connection"))
 			netManager.disconnect(); 
 		}
 	}, [this] () {
-		if(!netManager.isConnected()) {
+		if(!netManager.isConnected() && !netManager.isSetupConnected()) {
 			if(!netManager.connect()) {
 				info("Network still disconnected");
 			}

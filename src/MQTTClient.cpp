@@ -240,9 +240,7 @@ void MQTTClientImpl::doLoop() {
 		return;
 	}
 	if(!_mqttClient.connected()) {
-		DOIT_ONCE(LOGGER(info("MQTTClient disconnected, reconnect")), 10)
-		if(connect())
-			subscribe();
+		DOIT_ONCE(LOGGER(info("MQTTClient disconnected, reconnect"));if(connect()) subscribe(), 120)
 	}
 	if(_mqttClient.connected()) {
 		_mqttClient.loop();
@@ -250,7 +248,7 @@ void MQTTClientImpl::doLoop() {
 		flush();
 		_firstPublish = false;
 	} else {
-		DOIT_ONCE(LOGGER(info("MQTTClient still disconnected")), 10)
+		DOIT_ONCE(LOGGER(info("MQTTClient still disconnected")), 120)
 	}
 }
 

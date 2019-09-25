@@ -88,7 +88,6 @@ Vue.component('global-settings', {
 			updated: false,
 			invalid: [],
 			deviceSettings: {},
-			lastError: '',
 			resultMsg: ''
 		};
 
@@ -97,7 +96,6 @@ Vue.component('global-settings', {
 			var item = ret.deviceSettings[name];
 			item.isNumber = Number.isInteger(item.value);
 		}
-		ret.lastError = GoFarmTech.DeviceDescription.ats.filter(item => item.nm === 'LastError')[0].v;
 		return ret;
 	},
 	created: function () {
@@ -109,12 +107,6 @@ Vue.component('global-settings', {
 				<div class="md-title">{{navigation.text}}</div>\
 			</md-card-header>\
 			<md-card-content>\
-					<div class="md-layout-item md-small-size-100 last-error-field" md-size-50>\
-						<md-field>\
-							<label>Last Device Error</label>\
-							<p>{{lastError}}</p>\
-						</md-field">\
-					</div>\
 					<div class="md-layout-item md-small-size-100" md-size-50 v-for="(setting, name) in deviceSettings">\
 						<md-field :class="fieldClass(name)">\
 							<label v-bind:for="name">{{setting.title}}</label>\
@@ -139,7 +131,7 @@ Vue.component('global-settings', {
 		isInvalidField: function(name) {
 			var item = GoFarmTech.DeviceSettings[name];
 			var setting = this.deviceSettings[name];
-			var ret = !isNaN(item.value) && isNaN(setting.value);
+			var ret = item.value !== "" && !isNaN(item.value) && isNaN(setting.value);
 			if(setting.required) {
 				if(typeof(item.value) == 'string') {
 					if(!setting.value.length) {
