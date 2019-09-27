@@ -143,6 +143,10 @@ Vue.component('global-settings', {
 						}
 					}
 				}
+			} else {
+				if(name === 'deviceName' && setting.value.length) {
+					ret = setting.value.match(/^[a-zA-Z0-9_]*$/gm) ? false : true;
+				}
 			}
 
 			if(ret) {

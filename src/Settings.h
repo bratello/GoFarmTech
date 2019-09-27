@@ -100,6 +100,7 @@ public:
 
 	Property<String>	deviceId;
 	Property<String>	devicePwd;
+	Property<String>	deviceName;
 	int					deviceVersion;
 	Property<String>	ssid;
 	Property<String>	wifiPwd;
@@ -111,6 +112,7 @@ protected:
 	virtual void	onInitProperties() {
 		INIT_PROPERTY_ONLY(deviceId);
 		INIT_PROPERTY(devicePwd, "Device Password", true);
+		INIT_PROPERTY(deviceName, "Device Name", false);
 		INIT_PROPERTY(ssid, "Network ID", true);
 		INIT_PROPERTY(wifiPwd, "Network Password", true);
 		INIT_PROPERTY(mqttUsr, "MQTT Server User name", false);

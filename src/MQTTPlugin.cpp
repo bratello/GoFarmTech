@@ -49,7 +49,11 @@ void MQTTPlugin::setup() {
 
 Description MQTTPlugin::getDescription() {
 	Description meta;
-	meta.setName(getModuleName());
+	String deviceName = Settings::instance()->deviceName;
+	if(!deviceName.length()) {
+		deviceName = getModuleName();
+	}
+	meta.setName(deviceName);
 	meta.setDefaultValue(0);
 	meta.setValue(0);
 	meta.setType(Description::Type::object);
