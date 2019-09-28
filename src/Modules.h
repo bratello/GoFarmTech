@@ -15,20 +15,23 @@ enum class Modules {
     NetworkManager,
     MQTTValuesStorage,
 
-    
-    VALUE_MODULES_BEGIN = 20,
-    MQTTValueAbs = 21,
+    TIMER_MODULES_BEGIN = 20,
+    TimerValue = 21,
+    TimerTask,
+    TimerSlot,
+    TimerTaskPipeline,
+
+    VALUE_MODULES_BEGIN = 40,
+    MQTTValueAbs = 41,
     RelayValue,
     SensorValue,
     LogicalValue,
     LogicalFlag,
-    TimerValue,
-    TimerTask,
     SystemInfo,
     DHT11Value,
     SoilMoistureValue,
-    TimerSlot,
-    TimerTaskPipeline,
+    WaterFlowValue,
+    
 
     USER_MODULES_BEGIN = 100
 };
