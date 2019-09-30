@@ -200,6 +200,9 @@ void	SettingsImpl::fireOnChanged() {
 
 String	Settings::toJSON() {
 	auto props = getAllPropertyNames();
+	props.sort([](const String& first,  const String& second) {
+		return first > second;
+	});
 	return "{" + accumulate_chain<String>(props, [this] (const String& init, const String& propName) {
             return init + (init.length() > 0 ? "," : "") 
 			+ "\""

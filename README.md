@@ -35,6 +35,7 @@ This library provides a full feautured framework for development of serverless m
     * mqttPort=[MQTT Broker Port, e.g. 1883]
     * mqttUsr=[MQTT Broker Username - can be empty]
     * mqttPwd=[MQTT Broker Password - can be empty]
+    * xRegDevice=true
  5. values.txt file can be empty
  6. Map the GoFarmTech/src/web/build folder to the %your_project_dir%/data/web folder (just symlink or copy)
  7. Upload data folder to the device: 'Upload File System Image' Task in PlatformIO. This step required only at the beginning

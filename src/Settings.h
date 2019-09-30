@@ -108,9 +108,11 @@ public:
 	Property<String>	mqttPwd;
 	Property<String>	mqttHost;
 	Property<int>		mqttPort;
+	Property<bool>		xRegDevice;
 protected:
 	virtual void	onInitProperties() {
 		INIT_PROPERTY_ONLY(deviceId);
+		INIT_PROPERTY(xRegDevice, "Register Device on ioBroker", true);
 		INIT_PROPERTY(devicePwd, "Device Password", true);
 		INIT_PROPERTY(deviceName, "Device Name", false);
 		INIT_PROPERTY(ssid, "Network ID", true);

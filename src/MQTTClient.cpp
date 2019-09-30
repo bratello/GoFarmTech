@@ -227,6 +227,7 @@ void MQTTClientImpl::setup() {
 	Settings::instance()->onChanged([this, doSetServer] () {
 		LOGGER(info("Settings changed"))
 		_connectAttempts = 0;
+		_firstPublish = true;
 		doSetServer();
 		if(connect())
 			subscribe();
@@ -323,10 +324,17 @@ void MQTTClientImpl::flushDeviceDescription() {
 	if(!_firstPublish || !_deviceDescriptor || !_mqttClient.connected()) {
 		return;
 	}
+	if(!Settings::instance()->xRegDevice) {
+		//Device already registered
+		return;
+	}
 	auto topic = getTopicPath("");
 	auto json = _deviceDescriptor->getDescription().toJSON();
 	if(!mqttPublish(topic, json, "Device description")) {
 		LOGGER(warn(5, "Device descriptor publishing failed"))
+	} else {
+		Settings::instance()->xRegDevice = false;
+		LOGGER(info("Device Description published"))
 	}
 	_mqttClient.loop();
 	delay(500);

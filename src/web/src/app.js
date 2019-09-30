@@ -108,7 +108,10 @@ Vue.component('global-settings', {
 			</md-card-header>\
 			<md-card-content>\
 					<div class="md-layout-item md-small-size-100" md-size-50 v-for="(setting, name) in deviceSettings">\
-						<md-field :class="fieldClass(name)">\
+						<div v-if="name == \'xRegDevice\'">\
+							<md-switch v-model="setting.value" class="md-primary"><b>{{setting.title}}</b></md-switch>\
+						</div>\
+						<md-field :class="fieldClass(name)" v-else>\
 							<label v-bind:for="name">{{setting.title}}</label>\
 							<md-input :disabled="sending" v-bind:name="name" v-bind:id="name" v-model="setting.value" :required="setting.required" :type="setting.isNumber ? \'number\' : \'text\'"/>\
 							<span class="md-error">Wrong field value</span>\
