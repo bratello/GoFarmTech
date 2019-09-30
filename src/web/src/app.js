@@ -623,7 +623,7 @@ Vue.component('value-settings', {
 					</div>\
 			</md-card-content>\
 			<md-progress-bar md-mode="indeterminate" v-if="sending" />\
-			<md-card-actions>\
+			<md-card-actions md-alignment="left">\
 				<md-button type="submit" class="md-primary" :disabled="navigation.invalid.length > 0 || navigation.changes.length == 0 || sending">Apply</md-button>\
 			</md-card-actions>\
 		</md-card>\
@@ -638,20 +638,32 @@ Vue.component('value-field', {
 		maxVal = 999999;
 		step = 1;
 		if(this.value.tp === GoFarmTech.Type.number) {
-			if(this.value.v < 0) {
-				minVal = -100;
-				maxVal = 250;
-				step = 1;
-			}
-			else if(this.value.v < 100) {
-				maxVal = 250;
+			let val = Math.abs(this.value.v);
+			let isNegative = this.value.v != val;
+			if(val < 100) {
+				if(isNegative) {
+					minVal = this.value.v - 250;
+				}
+				maxVal = this.value.v + 250;
 				step = 1;
 			} else if(this.value.v < 1000) {
-				maxVal = 1500;
+				if(isNegative) {
+					minVal = this.value.v - 1500;
+				}
+				maxVal = this.value.v + 1500;
 				step = 10;
 			} else if(this.value.v < 10000) {
-				maxVal = 15000;
+				if(isNegative) {
+					minVal = this.value.v - 15000;
+				}
+				maxVal = this.value.v + 15000;
 				step = 50;
+			}
+
+			if(this.value.nm === 'skipTime') {
+				minVal = 0;
+				maxVal = 60000;
+				step = 250;
 			}
 		}
 		return {
