@@ -51,7 +51,7 @@ protected:\
             return ret;\
         }\
     }\
-    static void flowInterrupter() {\
+    ICACHE_RAM_ATTR static void flowInterrupter() {\
         className::flowCounter();\
     }\
     virtual     ulong   getWaterUsage() {\

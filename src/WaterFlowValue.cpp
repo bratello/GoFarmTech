@@ -25,15 +25,15 @@ time_t	WaterFlowValue::loop(time_t time) {
 }
 
 void	WaterFlowValue::setup() {
-    pinMode(_pin, INPUT);
-    digitalWrite(_pin, HIGH); // Optional Internal Pull-Up
     WaterFlowValueBase::setup();
     setupValueReachedEvents();
 }
 
 void    WaterFlowValue::setupPinInterrupt(void (*f)(void)) {
+    pinMode(_pin, INPUT_PULLUP);
+    //digitalWrite(_pin, HIGH); // Optional Internal Pull-Up
     attachInterrupt(digitalPinToInterrupt(_pin), f, RISING);
-    sei();
+    //sei();
 }
 
 ulong   WaterFlowValue::calcWaterUsage(ulong counter, float flowFactor, bool inMilliLiters) {
