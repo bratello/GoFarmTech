@@ -119,7 +119,7 @@ Vue.component('global-settings', {
 					</div>\
 			</md-card-content>\
 			<md-progress-bar md-mode="indeterminate" v-if="sending" />\
-			<md-card-actions>\
+			<md-card-actions md-alignment="left">\
 				<md-button type="submit" class="md-primary" :disabled="invalid.length > 0 || sending">Apply</md-button>\
 			</md-card-actions>\
 		</md-card>\
