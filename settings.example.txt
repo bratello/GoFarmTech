@@ -1,0 +1,11 @@
+xRegDevice=true
+deviceId=IoT123abcd4567
+deviceName=MySensor1
+deviceUsr=anUser
+devicePwd=anPassword
+ssid=MYHOME.WIFI
+wifiPwd=myWiFiPwd
+mqttHost=192.168.0.1
+mqttPort=1883
+mqttUsr=
+mqttPwd=

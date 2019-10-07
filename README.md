@@ -24,7 +24,7 @@ This library provides a full feautured framework for development of serverless m
  1. Create new project and install all dependencies and requirements
  2. Specify the data folder (data_dir in PlatformIO)
  3. Create settings.txt & values.txt files in data folder
- 4. Specify the following keys in settings.txt file (without brackets or quotes, just a value after the equal sign)
+ 4. Specify the following keys in settings.txt file - without brackets or quotes an comments, just a value after the equal sign. See settings.example.txt file for the reference
     * deviceId=[Your device ID e.g.IoTMyConditionTimer - this ID will be used as Maintenance WiFi HotSpot name and as the MQTT channel ID]
     * deviceName=[Device name for the MQTT channel description - can be empty]
     * deviceUsr=[Empty for now, for future use]
