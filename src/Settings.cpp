@@ -6,6 +6,7 @@
 #include	<functional>
 #include	<algorithm>
 #include	<FS.h>
+#include	"DataCoder.h"
 #ifdef ESP32
 	#include <SPIFFS.h>
 #endif
@@ -128,13 +129,23 @@ bool		SettingsImpl::isRequiredProperty(const String& name) {
 
 void SettingsImpl::load() {
 	if(!_properties.size()) {
-		_properties = readPropertiesFile(SETTINGS_FILE);		
+		_properties = readPropertiesFile(SETTINGS_FILE, [] (const String& key, const String& val) {
+			if(val.length() > 0 && (key == "wifiPwd" || key == "mqttPwd" || key == "mqttUsr")) {
+				return DataCoder::decode(val);
+			}
+			return val;
+		});		
 	}
 	return;
 }
 
 void SettingsImpl::save() {
-	writePropertiesFile(SETTINGS_FILE, _properties);
+	writePropertiesFile(SETTINGS_FILE, _properties, [] (const String& key, const String& val) {
+		if(val.length() > 0 && (key == "wifiPwd" || key == "mqttPwd" || key == "mqttUsr")) {
+			return DataCoder::encode(val);
+		}
+		return val;
+	});
 }
 
 String 	SettingsImpl::read(const String& name) {
@@ -148,7 +159,7 @@ void	SettingsImpl::write(const String& name, const String& val) {
 	fireOnChanged();
 }
 
-Settings::property_map_t	Settings::readPropertiesFile(const String& path) {
+Settings::property_map_t	Settings::readPropertiesFile(const String& path, const property_mutator_t& predicat) {
 	property_map_t props;
 	LOGGER(info("Loading persistent settings: ") + path)
 	auto f = SPIFFS.open(path.c_str(), "r");
@@ -170,13 +181,16 @@ Settings::property_map_t	Settings::readPropertiesFile(const String& path) {
 		}
 		auto key = s.substring(0, pos);
 		auto val = s.substring(pos + 1);
+		if(predicat) {
+			val = predicat(key, val);
+		}
 		props[key] = val;
 	}
 	f.close();
 	return props;
 }
 
-void	Settings::writePropertiesFile(const String& path, const Settings::property_map_t& table) {
+void	Settings::writePropertiesFile(const String& path, const Settings::property_map_t& table, const property_mutator_t& predicat) {
 	LOGGER(info("Save settings persistently: ") + path)
 	auto f = SPIFFS.open(path.c_str(), "w+");
 	if(!f) {
@@ -186,7 +200,11 @@ void	Settings::writePropertiesFile(const String& path, const Settings::property_
 	LOGGER(info("Settings file position: ") + f.position() + ", size: " + f.size())
 	for(auto& it : table) {
 		::yield();
-		f.println(it.first + "=" + it.second);
+		auto val = it.second;
+		if(predicat) {
+			val = predicat(it.first, val);
+		}
+		f.println(it.first + "=" + val);
 	}
 	LOGGER(info("Settings file written: ") + f.position() + "B")
 	f.close();

@@ -18,24 +18,26 @@ This library provides a full feautured framework for development of serverless m
  2. [DHT sensor library](https://github.com/adafruit/DHT-sensor-library)
  3. [PubSubClient](https://github.com/knolleary/pubsubclient): please install PubSubClient to the local lib folder and modify the PubSubClient::domain member's type from **const char\*** to the **String** (well known boggus pointer issue)
  4. [Arduino_JSON](http://github.com/arduino-libraries/Arduino_JSON)
- 5. SPIFFS should be supported and available, in about 400K FS space is required.
+ 5. [Base64](https://github.com/agdl/Base64)
+ 6. SPIFFS should be supported and available, in about 400K FS space is required.
 
 ## Build steps
  1. Create new project and install all dependencies and requirements
  2. Specify the data folder (data_dir in PlatformIO)
  3. Create settings.txt & values.txt files in data folder
- 4. Specify the following keys in settings.txt file - without brackets or quotes an comments, just a value after the equal sign. See settings.example.txt file for the reference
+ 4. Specify the following keys in settings.txt file - without brackets or quotes and comments, just a value after the equal sign. See [settings.example.txt](settings.example.txt) file for the reference
     * deviceId=[Your device ID e.g.IoTMyConditionTimer - this ID will be used as Maintenance WiFi HotSpot name and as the MQTT channel ID]
     * deviceName=[Device name for the MQTT channel description - can be empty]
     * deviceUsr=[Empty for now, for future use]
     * devicePwd=[Device Password for the maintenance]
     * ssid=[WiFi network name for ioBroker connection]
     * wifiPwd=[WiFi password]
-    * mqttHost=[MQTT Broker IP e.g. 192.168.0.120]
+    * mqttHost=[MQTT Broker IP e.g. 192.168.0.30]
     * mqttPort=[MQTT Broker Port, e.g. 1883]
     * mqttUsr=[MQTT Broker Username - can be empty]
     * mqttPwd=[MQTT Broker Password - can be empty]
     * xRegDevice=true
+    - _Leave fields mqttUsr, mqttPwd & wifiPwd are empty and initialize them through the [WebUI](screenshots/globalSettingsUI.jpg) for proper value encryption_
  5. values.txt file can be empty
  6. Map the GoFarmTech/src/web/build folder to the %your_project_dir%/data/web folder (just symlink or copy)
  7. Upload data folder to the device: 'Upload File System Image' Task in PlatformIO. This step required only at the beginning
@@ -65,10 +67,10 @@ This library provides a full feautured framework for development of serverless m
 The Framework was tested on esp8266 platform only. Please open the issue in case of some questions or troubles, I'll answer as soon as I can. Feel free to modify this code, apply logs or implement your own sensors - any help is welcomed.
 
 ## Roadmap
- - esp32 support
- - Encrypt username & passwords in settings.txt file
- - Provide support for other sensors
- - LoRaWAN support (?)
+ - [*]  Encrypt username & passwords in settings.txt file
+ - [ ]  Provide support for other sensors
+ - [ ]  esp32 support
+ - [ ]  LoRaWAN support (?)
 
 
 ## License

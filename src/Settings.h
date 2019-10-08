@@ -64,6 +64,8 @@ class Settings : public Loggable, public PropertyIO {
 	LOGGABLE(Settings)
 public:
 	typedef	std::function<void (void)>		event_t;
+	typedef std::function<String (const String&, const String&)>	
+											property_mutator_t;
 	typedef std::map<String, String>		property_map_t;
 	typedef std::list<String>				file_list_t;
 protected:
@@ -73,8 +75,8 @@ protected:
 public:
 	fs::File		readFile(const String& path);
 	file_list_t		readDir(const String& path);
-	property_map_t	readPropertiesFile(const String& path);
-	void			writePropertiesFile(const String& path, const property_map_t& table);
+	property_map_t	readPropertiesFile(const String& path, const property_mutator_t& predicat = property_mutator_t());
+	void			writePropertiesFile(const String& path, const property_map_t& table, const property_mutator_t& predicat = property_mutator_t());
 public:
 	static  Settings* instance();
 
