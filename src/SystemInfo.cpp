@@ -6,7 +6,7 @@
 #define     UPDATE_VALUE(val, exp)  { auto newVal = exp; if(newVal != val) { val = newVal; this->_client->publish(#val, val); } }
 
 SystemInfo::SystemInfo() : MQTTValueAbs(), cpuFreqMHz(), freeHeap(), heapFragmentation(), sketchSize(), flashSize() {
-    _skipTime = 10000;
+    _skipTime = 15000;
 }
 
 void  SystemInfo::doLoop() {
@@ -25,8 +25,9 @@ void  SystemInfo::doLoop() {
 }
 
 void  SystemInfo::setup() {
+    _skipTime = this->loadSkipTime(_skipTime);
     this->_client->subscribe("skipTime", make_subscriber<time_t>([this] (const time_t& val) {
-		_skipTime = val;
+		_skipTime = this->saveSkipTime(val);
 		this->_client->publish("skipTime", val);
 	}));
 }
