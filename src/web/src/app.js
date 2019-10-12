@@ -200,6 +200,7 @@ Vue.component('timer-settings', {
 			currentTimeslot: null,
 			confirmDeleteTimeslot: false,
 			newSlotError: false,
+			sysTaskError: false,
 			sending: false,
 			timerValue: timer
 		};
@@ -335,6 +336,10 @@ Vue.component('timer-settings', {
 			return arr;
 		},
 		onRemoveTimeslot: function (timeslot) {
+			if(this.isSysTask() && this.currentTab.timeslots.length === 1) {
+				this.sysTaskError = true;
+				return;
+			}
 			this.currentTimeslot = timeslot;
 			this.confirmDeleteTimeslot = true;
 		},
@@ -365,6 +370,9 @@ Vue.component('timer-settings', {
 			if(item) {
 				this.currentTab.timeslots.updateTimeslotLimits(item, bStart);
 			}
+		},
+		isSysTask : function() {
+			return this.currentTab.text.indexOf('sys') === 0;
 		}
 	},
 	template: '\
@@ -385,6 +393,7 @@ Vue.component('timer-settings', {
       			@md-cancel="onCancelDeleteTimeslot"\
 				@md-confirm="onDeleteSlot"></md-dialog-confirm>\
 		<md-dialog-alert :md-active.sync="newSlotError" md-content="New timeslot unavailable. Change the previous timeslot settings" md-confirm-text="OK"></md-dialog-alert>\
+		<md-dialog-alert :md-active.sync="sysTaskError" md-content="You can\'t remove last timeslot from System task" md-confirm-text="OK"></md-dialog-alert>\
 	</div>',
 });
 
