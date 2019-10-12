@@ -39,7 +39,7 @@ protected:
 	virtual		void	setupInfra();
 	virtual		void	setupDeviceLogic();
 	virtual		time_t	loopValues(time_t ticks);
-	virtual		void	setupNetworkAdminTask(Timer timer);
+	virtual		void	setupSysTasks(Timer timer) = 0;
 public:
 	virtual		void	setup();
 

@@ -9,11 +9,15 @@
     #include <WiFi.h>
 #endif
 #include	"MQTTPlugin.h"
+#include 	"NetworkManager.h"
 
 class MQTTWiFiPlugin : public MQTTPlugin {
 	LOGGABLE(MQTTWiFiPlugin)
 protected:
 	WiFiClient		_espClient;
+
+	virtual		void	setupSysTasks(Timer timer);
+	virtual		void	onConnectionStatusChanged(NetworkConnectionStatus status);
 public:
 	MQTTWiFiPlugin();
 

@@ -2,7 +2,6 @@
 //  Author: bratello
 
 #include	"MQTTPlugin.h"
-#include	"NetworkManager.h"
 
 #define VERIFY_MIN_DELAY(exp) { auto skipTime = exp; if(minSkipTime == -1 || minSkipTime > skipTime) minSkipTime = skipTime; }
 
@@ -35,7 +34,7 @@ void MQTTPlugin::setup() {
 	LOGGER(info("Plugin setup"));
 	_values.clear();
 	setupTimer(_timer);
-	setupNetworkAdminTask(_timer);
+	setupSysTasks(_timer);
 	setupValue(_timer);
 	setupValue(_sysInfo);
 	setupValues();
@@ -103,21 +102,4 @@ time_t 	MQTTPlugin::loopValues(time_t ticks) {
 		VERIFY_MIN_DELAY(val->loop(ticks));
 	}
 	return minSkipTime;
-}
-
-void	MQTTPlugin::setupNetworkAdminTask(Timer timer) {
-	timer.on("netAdmin",{ 
-		{0, TIME_INTERVAL::DAY, 10, TIME_INTERVAL::MINUTE * 5, TimerSlot::ALL_DAYS, TimerSlot::ALL_MONTHS} 
-	}, [this] () {
-		if(!netManager.isConnected() && !netManager.isSetupConnected()) {
-			LOGGER(info("Restart network connection"))
-			netManager.disconnect(); 
-		}
-	}, [this] () {
-		if(!netManager.isConnected() && !netManager.isSetupConnected()) {
-			if(!netManager.connect()) {
-				info("Network still disconnected");
-			}
-		}
-	});
 }

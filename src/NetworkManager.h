@@ -6,6 +6,12 @@
 #include	<Arduino.h>
 #include	"Loggable.h"
 
+enum class NetworkConnectionStatus {
+    DISCONNECTED,
+    CONNECTING,
+    CONNECTED
+};
+
 class NetworkManager : public Loggable {
     LOGGABLE(NetworkManager)
 public:
