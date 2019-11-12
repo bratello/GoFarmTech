@@ -28,7 +28,7 @@ enum class Modules {
     LogicalValue,
     LogicalFlag,
     SystemInfo,
-    DHT11Value,
+    DHTValue,
     SoilMoistureValue,
     WaterFlowValue,
     

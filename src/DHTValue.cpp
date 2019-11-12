@@ -1,20 +1,20 @@
 //  DHT11Value.cpp - GoFarmTech Framework Source Code
 //  Author: bratello
 
-#include	"DHT11Value.h"
+#include	"DHTValue.h"
 
 #define	DHT_MAX 50
 typedef	std::unique_ptr<DHT>		DHTPtr;
 static	DHTPtr	__dhtMap[DHT_MAX] = {};
 static	bool	__dhtInitializer[DHT_MAX] = {};
 
-DHT11Value::DHT11Value(uint8_t pin, bool mode, float val, float min, float max) : FloatSensorValue_t(val, min, max), _pin(pin), _tempMode(mode) { 
+DHTValue::DHTValue(uint8_t pin, bool mode, uint8_t model, float val, float min, float max) : FloatSensorValue_t(val, min, max), _pin(pin), _tempMode(mode) { 
 	if(!__dhtMap[pin]) {
-		__dhtMap[pin] = DHTPtr(new DHT(pin, DHT11));
+		__dhtMap[pin] = DHTPtr(new DHT(pin, model));
 	}
 }
 
-void DHT11Value::setup() {
+void DHTValue::setup() {
 	if(!__dhtInitializer[_pin]) {
 		__dhtMap[_pin]->begin();
 		__dhtInitializer[_pin] = true;
@@ -22,7 +22,7 @@ void DHT11Value::setup() {
 	FloatSensorValue_t::setup();
 }
 
-void	DHT11Value::doLoop() {
+void	DHTValue::doLoop() {
 	auto val = (_tempMode ? __dhtMap[_pin]->readTemperature() : __dhtMap[_pin]->readHumidity());
 	if(isnan(val)) {
 		return;

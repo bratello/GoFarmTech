@@ -6,7 +6,7 @@
 */
 #include  <LogicalValue.h>
 #include  <RelayValue.h>
-#include  <DHT11Value.h>
+#include  <DHTValue.h>
 #include  <SoilMoistureValue.h>
 #include  <MQTTWiFiPlugin.h>
 
