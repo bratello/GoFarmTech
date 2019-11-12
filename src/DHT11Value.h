@@ -11,7 +11,6 @@ class DHT11Value : public SensorValue<float> {
 protected:
 	uint8_t		_pin = 0;
 	bool		_tempMode = false;
-	DHT 		_dht;
 
 	virtual		void	doLoop();
 public:
