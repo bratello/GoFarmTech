@@ -7,14 +7,14 @@ Runnable::Runnable() : _lastTime(0), _skipTime(500) {}
 
 Runnable::~Runnable() {}
 
-time_t Runnable::loop(time_t time) {
+void Runnable::loop(time_t time) {
 	::yield();
 	if(!time) {
 		time = millis();
 	}
-	if(time - _lastTime >= _skipTime) {
+	if(time >= nextLoop()) {
 		_lastTime = time;
 		doLoop();
 	}
-	return _skipTime;
+	return;
 }

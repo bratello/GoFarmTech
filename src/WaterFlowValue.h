@@ -32,7 +32,7 @@ protected:
 public:
     WaterFlowValue(uint8_t pin, ulong val = ulong(), ulong min = ulong(), ulong max = ulong());
 
-    virtual		time_t	loop(time_t time = 0);
+    virtual		void	loop(time_t time = 0);
     virtual		void	setup();
     virtual     void    onValueFromNowReached(ulong val, const value_reached_event_t& callback);
 };

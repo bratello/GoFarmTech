@@ -15,13 +15,13 @@ void WaterFlowValue::doLoop() {
     WaterFlowValueBase::doLoop();
 }
 
-time_t	WaterFlowValue::loop(time_t time) {
+void	WaterFlowValue::loop(time_t time) {
     auto temp = _lastTime;
-    auto ret = WaterFlowValueBase::loop(time);
+    WaterFlowValueBase::loop(time);
     if(temp != _lastTime) {
         _prevTime = temp;
     }
-    return ret;
+    return;
 }
 
 void	WaterFlowValue::setup() {

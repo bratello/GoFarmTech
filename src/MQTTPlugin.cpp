@@ -3,9 +3,7 @@
 
 #include	"MQTTPlugin.h"
 
-#define VERIFY_MIN_DELAY(exp) { auto skipTime = exp; if(minSkipTime == -1 || minSkipTime > skipTime) minSkipTime = skipTime; }
-
-MQTTPlugin::MQTTPlugin() : _client(0) {
+MQTTPlugin::MQTTPlugin() : _client(0), _loopValueIndex(0) {
 	_skipTime = 0;
 }
 
@@ -14,15 +12,14 @@ void MQTTPlugin::doLoop() {
 		LOGGER(error(1, "Initialize plugin first!"))
 		return;
 	}
-	time_t minSkipTime = -1;
-	VERIFY_MIN_DELAY(_client->loop(_lastTime));
+	if(_client->nextLoop() <= _lastTime)
+		_client->loop(_lastTime);
 	yield();
 	logMemUsage("is still available");
-	VERIFY_MIN_DELAY(_settingsManager.loop(_lastTime));
+	if(_settingsManager.nextLoop() <= _lastTime)
+		_settingsManager.loop(_lastTime);
 	yield();
-	VERIFY_MIN_DELAY(loopValues(_lastTime));
-	if(minSkipTime > 0)
-		delay(minSkipTime < 1000 ? minSkipTime : 1000);
+	loopValues(_lastTime);
 }
 
 void MQTTPlugin::setup() {
@@ -44,6 +41,7 @@ void MQTTPlugin::setup() {
 	_settingsManager.setDeviceDescriptor(this);
 	_settingsManager.setClient(_client);
 	_settingsManager.setup();
+	_loopValueIndex = 0;
 }
 
 Description MQTTPlugin::getDescription() {
@@ -95,11 +93,19 @@ void	MQTTPlugin::setupDeviceLogic() {
 	//Do nothing
 }
 
-time_t 	MQTTPlugin::loopValues(time_t ticks) {
-	time_t minSkipTime = -1;
-	for(auto val : _values) {
-		::yield();
-		VERIFY_MIN_DELAY(val->loop(ticks));
+void 	MQTTPlugin::loopValues(time_t ticks) {
+	if(_loopValueIndex >= _values.size()) {
+		_loopValueIndex = 0;
 	}
-	return minSkipTime;
+	while(_loopValueIndex < _values.size()) {
+		auto it = std::next(_values.begin(), _loopValueIndex++);
+		if(it != _values.end() && (*it)->nextLoop() <= ticks) {
+			(*it)->loop(ticks);
+			break;
+		}
+	}
+	if(_loopValueIndex >= _values.size()) {
+		_loopValueIndex = 0;
+	}
+	return;
 }

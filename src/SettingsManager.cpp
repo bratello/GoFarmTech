@@ -53,7 +53,7 @@ protected:
 public:
 	virtual	void	setup();
 public:
-    time_t	loop(time_t time = 0);
+    void	loop(time_t time = 0);
 
     AccessPoint(Descriptable* device, MQTTClientTransmitter* client, uint8_t leadPin, const onCloseAPCallback_t& cb);
     virtual ~AccessPoint();
@@ -285,8 +285,8 @@ void AccessPoint::doJsonResponse(const String& data) {
     webServer.send(200, "application/json", data);
 }
 
-time_t AccessPoint::loop(time_t time) {
+void AccessPoint::loop(time_t time) {
     dnsServer.processNextRequest();
     webServer.handleClient();
-    return _skipTime;
+    return;
 }

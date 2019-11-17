@@ -29,6 +29,7 @@ protected:
 	TimerValue			_timer;
 	SettingsManager		_settingsManager;
 	SystemInfo			_sysInfo;
+	uint16_t			_loopValueIndex;
 //Runnable implementation
 protected:
 	virtual		void	doLoop();
@@ -38,7 +39,7 @@ protected:
 	virtual		void	setupLogs();
 	virtual		void	setupInfra();
 	virtual		void	setupDeviceLogic();
-	virtual		time_t	loopValues(time_t ticks);
+	virtual		void	loopValues(time_t ticks);
 	virtual		void	setupSysTasks(Timer timer) = 0;
 public:
 	virtual		void	setup();
