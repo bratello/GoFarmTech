@@ -8,7 +8,7 @@ enum class Modules {
     SYSTEM_MODULES_BEGIN = 0,
     Settings = 1,
     MQTTPlugin,
-    MQTTWiFiPlugin,
+    MQTTNetworkPlugin,
     MQTTClient,
     SettingsManager,
     AccessPoint,

@@ -15,6 +15,7 @@ extern "C" {
 
 
 static NetworkManager	instance;
+static WiFiClient wifiClient;
 NetworkManager& netManager = instance;
 static IPAddress zeroIP = IPAddress(0, 0, 0, 0);
 
@@ -55,6 +56,10 @@ bool    NetworkManager::lightSleep(unsigned long t) {
 	wifi_set_sleep_type(LIGHT_SLEEP_T);
 	delay(t);
 	return wifi_set_sleep_type(NONE_SLEEP_T);
+}
+
+Client& NetworkManager::getClient() {
+	return wifiClient;
 }
 
 bool    NetworkManager::connectSetup() {

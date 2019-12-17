@@ -4,6 +4,7 @@
 #ifndef MQTT_WIFI_MANAGER_H
 #define MQTT_WIFI_MANAGER_H
 #include	<Arduino.h>
+#include    <Client.h>
 #include	"Loggable.h"
 
 enum class NetworkConnectionStatus {
@@ -19,6 +20,7 @@ public:
     bool        disconnect();
     bool        isConnected();
     bool        lightSleep(unsigned long time);
+    Client&     getClient();
 
     bool        connectSetup();
     bool        disconnectSetup();

@@ -8,11 +8,11 @@
 #include  <RelayValue.h>
 #include  <DHTValue.h>
 #include  <SoilMoistureValue.h>
-#include  <MQTTWiFiPlugin.h>
+#include  <MQTTNetworkPlugin.h>
 
 ////////////////////////////////////////////////
 // Main Device Class
-class ESP8266Timer : public MQTTWiFiPlugin {
+class ESP8266Timer : public MQTTNetworkPlugin {
 	////////////////////////////////////////////////
 	// Specify device name for logs & device description
 	LOGGABLE_MODULE_NAME(ESP8266Timer)
@@ -41,7 +41,7 @@ public:
 	DEFINE_LOGICAL_FLAG(SomeProcessFlag, false) someProcessFlag;
 
 	// Default constructor
-    ESP8266Timer() : MQTTWiFiPlugin() {
+    ESP8266Timer() : MQTTNetworkPlugin() {
     	//Settings::instance()->deviceVersion = 1;
     }
 
@@ -199,7 +199,7 @@ protected:
 	virtual void  setupLogs() {
 		Serial.begin(115200);
 		//enableModuleLog(4);
-		MQTTWiFiPlugin::setupLogs();
+		MQTTNetworkPlugin::setupLogs();
 	}
 
 	////////////////////////////////////////////////
