@@ -10,114 +10,39 @@
 #include	"NetworkManager.h"
 #include	"Settings.h"
 
-
-MQTTClient::MQTTClient() : Runnable(), _deviceDescriptor(NULL) { }
-
-class MQTTChildClientBase : public MQTTClient {
+class MQTTClientImpl : public MQTTClient {
 protected:
-	typedef std::unique_ptr<MQTTClient>	MQTTClientPtr;
-	typedef	std::list<MQTTClientPtr>	MQTTClientList_t;
+	typedef		std::map<String, String>				topic_value_map_t;
+	typedef		std::map<String, payload_callback_t>	topic_subscriber_map_t;
+	topic_value_map_t									_topicValues;
+	topic_subscriber_map_t								_topicSubscribers;
+	Descriptable*										_deviceDescriptor;
 
-	String 				_topic;
-	MQTTClientList_t	_children;
-protected:
-	String			getFullTopicName(const String& topic);
-	virtual void 	doSubscribe(const String& topic, const payload_callback_t& cb);
-	virtual void	doPublish(const String& topic, const String& value);
-public:
-	MQTTChildClientBase(const String& topic = "") : MQTTClient(), _topic(topic) {}
-	virtual MQTTClient* getChildClient(const String& topic);
-	virtual String getClientPayload(bool bClear = false);
-	virtual	payload_callback_t	findTopicSubscriber(const String& topic);
-
-public:
-	virtual bool transmit(const String& topic, const String& value);
-};
-
-String MQTTChildClientBase::getClientPayload(bool bClear) {
-	String payload = accumulate_chain<String>(_topicValues, [this] (const String& init, const topic_value_map_t::value_type& it) {
-		return init + (init.length() > 0 ? "," : "") + "\"" + it.first + "\":" + it.second;
-	});
-	if(bClear && !_topicValues.empty()) {
-		_topicValues.clear();
-	}
-	for(auto& child : _children) {
-		auto childPayload = child->getClientPayload(bClear);
-		if(childPayload.length() > 0) {
-			payload += (payload.length() > 0 ? "," : "") + childPayload;
-		}
-	}
-	return payload;
-}
-void MQTTChildClientBase::doSubscribe(const String& topic, const payload_callback_t& callback) {
-	auto topicName = getFullTopicName(topic);
-	_topicSubscribers[topicName] = callback;
-	//LOGGER(info("Subscribed: ") + topicName);
-}
-
-void MQTTChildClientBase::doPublish(const String& topic, const String& value) {
-	auto topicName = getFullTopicName(topic);
-	_topicValues[topicName] = value;
-	//LOGGER(info("Published: ") + topicName);
-}
-
-payload_callback_t	MQTTChildClientBase::findTopicSubscriber(const String& topic) {
-	auto it = _topicSubscribers.find(topic);
-	if(it != _topicSubscribers.end()) {
-		return it->second;
-	}
-	for(auto& child: _children) {
-		auto subscriber = child->findTopicSubscriber(topic);
-		if(subscriber) {
-			return subscriber;
-		}
-	}
-	return payload_callback_t();
-}
-
-String	MQTTChildClientBase::getFullTopicName(const String& topic) {
-	return (_topic.length() > 0 ? (topic.length() > 0 ? _topic + "/" + topic : _topic) : topic);
-}
-
-class MQTTChildClient : public MQTTChildClientBase {
-protected:
-	virtual		void	doLoop() {}
-public:
-	MQTTChildClient(const String& topic) : MQTTChildClientBase(topic) {}
-	virtual		void	setup()	{}
-};
-
-MQTTClient* MQTTChildClientBase::getChildClient(const String& topic) {
-	auto client = new MQTTChildClient(( _topic.length() > 0 ? _topic + "/" : "") + topic);
-	_children.push_back(std::move(std::unique_ptr<MQTTClient>(client)));
-	return client;
-}
-
-bool MQTTChildClientBase::transmit(const String& topic, const String& value) {
-	auto subscriber = findTopicSubscriber(topic);
-	if(subscriber) {
-		subscriber(value);
-		return true;
-	}
-	return false;
-}
-
-class MQTTClientImpl : public MQTTChildClientBase {
 protected:
 	PubSubClient	_mqttClient;
 	int 			_connectAttempts = 0;
 	time_t 			_lastConnectionAttempt = 0;
 	const 	int 	_maxConnectAttempts = 3;
 	const 	int 	_connectRetryTimeout = 30;
-	bool			_firstPublish;
+	bool			_firstPublish = false;
 
 	String getTopicPath(const String& topic);
+	payload_callback_t	findTopicSubscriber(const String& topic);
+	String getClientPayload(bool bClear);
 public:
-	MQTTClientImpl() : MQTTChildClientBase(), _connectAttempts(), _lastConnectionAttempt(), _firstPublish(true) {}
+	MQTTClientImpl() : _deviceDescriptor(NULL) {}
 
-	void	setClient(Client& client) {
+	void setClient(Client& client) {
 		_mqttClient.setClient(client);
 	}
+
+protected:
+	virtual void 	doSubscribe(const String& topic, const payload_callback_t& callback);
+	virtual void	doPublish(const String& topic, const String& value);
+public:
+	virtual MQTTClient* 		getChildClient(const String& topic);
+	virtual void setDeviceDescriptor(Descriptable* deviceDescriptor);
+
 
 //Runnable implementation
 protected:
@@ -131,12 +56,24 @@ public:
 	bool		subscribe();
 	void		flush();
 	void		flushDeviceDescription();
+
+	virtual bool transmit(const String& topic, const String& value);
 };
 
-MQTTClient* MQTTClient::instance(Client& client) {
-	static MQTTClientImpl obj;
-	obj.setClient(client);
-	return &obj;
+void	MQTTClientImpl::doSubscribe(const String& topic, const payload_callback_t& callback) {
+	auto topicName = topic;
+	_topicSubscribers[topicName] = callback;
+	//LOGGER(info("Subscribed: ") + topicName);
+}
+
+void	MQTTClientImpl::doPublish(const String& topic, const String& value) {
+	auto topicName = topic;
+	_topicValues[topicName] = value;
+	//LOGGER(info("Published: ") + topicName);
+}
+
+void MQTTClientImpl::setDeviceDescriptor(Descriptable* deviceDescriptor) {
+	_deviceDescriptor = deviceDescriptor;
 }
 
 bool MQTTClientImpl::connect() {
@@ -253,11 +190,6 @@ void MQTTClientImpl::doLoop() {
 	}
 }
 
-String MQTTClientImpl::getTopicPath(const String& topic) {
-	String deviceId = Settings::instance()->deviceId;
-	return String("GoFarmTechClient/") + deviceId + (topic.length() ? "/" + topic : String(""));
-}
-
 bool MQTTClientImpl::subscribe() {
 	if(_mqttClient.connected()) {
 		auto topic = getTopicPath("subscribe");
@@ -312,7 +244,6 @@ void MQTTClientImpl::flush() {
 	}
 	auto payload = getClientPayload(true);
 	if(payload.length()) {
-		payload = "{" + payload + "}";
 		auto topic = getTopicPath("publish");
 		if(mqttPublish(topic, payload, "Value")) {
 			_topicValues.clear();
@@ -338,4 +269,108 @@ void MQTTClientImpl::flushDeviceDescription() {
 	}
 	_mqttClient.loop();
 	delay(500);
+}
+
+String MQTTClientImpl::getTopicPath(const String& topic) {
+	String deviceId = Settings::instance()->deviceId;
+	return String("GoFarmTechClient/") + deviceId + (topic.length() ? "/" + topic : String(""));
+}
+
+payload_callback_t	MQTTClientImpl::findTopicSubscriber(const String& topic) {
+	auto it = _topicSubscribers.find(topic);
+	if(it != _topicSubscribers.end()) {
+		return it->second;
+	}
+	return payload_callback_t();
+}
+
+String MQTTClientImpl::getClientPayload(bool bClear) {
+	String payload = accumulate_chain<String>(_topicValues, [this] (const String& init, const topic_value_map_t::value_type& it) {
+		return init + (init.length() > 0 ? "," : "") + "\"" + it.first + "\":" + it.second;
+	});
+	if(bClear && !_topicValues.empty()) {
+		_topicValues.clear();
+	}
+	if(payload.length() > 0) {
+		payload = "{" + payload + "}";
+	}
+	return payload;
+}
+
+bool MQTTClientImpl::transmit(const String& topic, const String& value) {
+	auto subscriber = findTopicSubscriber(topic);
+	if(subscriber) {
+		subscriber(value);
+		return true;
+	}
+	return false;
+}
+
+MQTTClient::MQTTClient() : Runnable() { }
+
+MQTTClient* MQTTClient::instance(Client& client) {
+	static MQTTClientImpl obj;
+	obj.setClient(client);
+	return &obj;
+}
+
+class MQTTChildClient : public MQTTClient {
+protected:
+	String			_name;
+	MQTTClient*		_parent;
+	String	getFullTopicName(const String& topic);
+public:
+	MQTTChildClient(const String& name, MQTTClient* parent) : _name(name), _parent(parent) {}
+
+protected:
+	virtual void 	doSubscribe(const String& topic, const payload_callback_t& callback);
+	virtual void	doPublish(const String& topic, const String& value);
+public:
+	virtual MQTTClient* getChildClient(const String& name);
+	virtual void setDeviceDescriptor(Descriptable* deviceDescriptor);
+
+
+//Runnable implementation
+protected:
+	virtual		void	doLoop();
+	bool				mqttPublish(const String& topic, const String& payload, const String& help);
+public:
+	virtual		void	setup();
+	virtual bool transmit(const String& topic, const String& value);
+};
+
+String	MQTTChildClient::getFullTopicName(const String& topic) {
+	return (_name.length() > 0 ? (topic.length() > 0 ? _name + "/" + topic : _name) : topic);
+}
+
+void MQTTChildClient::doSubscribe(const String& topic, const payload_callback_t& callback) {
+	auto topicName = getFullTopicName(topic);
+	_parent->doSubscribe(topicName, callback);
+	//LOGGER(info("Subscribed: ") + topicName);
+}
+
+void MQTTChildClient::doPublish(const String& topic, const String& value) {
+	auto topicName = getFullTopicName(topic);
+	_parent->doPublish(topicName, value);
+	//LOGGER(info("Published: ") + topicName);
+}
+
+MQTTClient* MQTTChildClient::getChildClient(const String& name) {
+	auto client = new MQTTChildClient(( _name.length() > 0 ? _name + "/" : "") + name, this);
+	return client;
+}
+
+void MQTTChildClient::setDeviceDescriptor(Descriptable* deviceDescriptor) {
+	_parent->setDeviceDescriptor(deviceDescriptor);
+}
+
+void MQTTChildClient::doLoop() {}
+void MQTTChildClient::setup() {}
+bool MQTTChildClient::transmit(const String& topic, const String& value) {
+	return _parent->transmit(topic, value);
+}
+
+MQTTClient* MQTTClientImpl::getChildClient(const String& name) {
+	auto client = new MQTTChildClient(name, this);
+	return client;
 }

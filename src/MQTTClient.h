@@ -27,19 +27,14 @@ payload_callback_t	make_callback(const std::function<void (const T&)>& callback)
 class MQTTClient : public Loggable, public Runnable, public MQTTClientTransmitter {
 	LOGGABLE(MQTTClient)
 protected:
-	typedef		std::map<String, String>				topic_value_map_t;
-	typedef		std::map<String, payload_callback_t>	topic_subscriber_map_t;
-	topic_value_map_t									_topicValues;
-	topic_subscriber_map_t								_topicSubscribers;
-	Descriptable*										_deviceDescriptor;
+
 protected:
 	MQTTClient();
 	virtual void 	doSubscribe(const String& topic, const payload_callback_t& callback) = 0;
 	virtual void	doPublish(const String& topic, const String& value) = 0;
 public:
-	virtual MQTTClient* 		getChildClient(const String& topic) = 0;
-	virtual String 				getClientPayload(bool bClear = false) = 0;
-	virtual	payload_callback_t	findTopicSubscriber(const String& topic) = 0;
+	virtual MQTTClient* 		getChildClient(const String& name) = 0;
+	virtual void setDeviceDescriptor(Descriptable* deviceDescriptor) = 0;
 public:
 	template<typename T>
 	void 	subscribe(const String& topic, const std::function<void (const T&)>& callback) {
@@ -51,11 +46,8 @@ public:
 		doPublish(topic, to_json<T>(val));
 	}
 
-	void setDeviceDescriptor(Descriptable* deviceDescriptor) {
-		_deviceDescriptor = deviceDescriptor;
-	}
-
 	static MQTTClient* instance(Client& client);
+	friend class MQTTChildClient;
 };
 
 template<typename T>
