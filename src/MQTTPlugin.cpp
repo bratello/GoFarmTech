@@ -3,7 +3,7 @@
 
 #include	"MQTTPlugin.h"
 
-MQTTPlugin::MQTTPlugin() : _client(0), _loopValueIndex(0) {
+MQTTPlugin::MQTTPlugin() : _loopValueIndex(0) {
 	_skipTime = 0;
 }
 
@@ -39,7 +39,7 @@ void MQTTPlugin::setup() {
 	setupDeviceLogic();
 	_client->setDeviceDescriptor(this);
 	_settingsManager.setDeviceDescriptor(this);
-	_settingsManager.setClient(_client);
+	_settingsManager.setClient(_client.get());
 	_settingsManager.setup();
 	_loopValueIndex = 0;
 }
@@ -65,7 +65,7 @@ Description MQTTPlugin::getDescription() {
 
 void	MQTTPlugin::setupValue(MQTTValueAbs& val) {
 	::yield();
-	val.setClient(_client);
+	val.setClient(_client.get());
 	val.setup();
 	_values.push_back(&val);
 }

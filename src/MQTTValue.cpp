@@ -56,7 +56,7 @@ inline MQTTValuesStorage& values_storage() {
 	return MQTTValuesStorage::storage();
 }
 
-MQTTValueAbs::MQTTValueAbs() : _client(NULL) {
+MQTTValueAbs::MQTTValueAbs() {
 	::yield();
 	this->_skipTime = 1000;
 }
@@ -64,7 +64,7 @@ MQTTValueAbs::MQTTValueAbs() : _client(NULL) {
 MQTTValueAbs::~MQTTValueAbs() {}
 
 void	MQTTValueAbs::setClient(MQTTClient* obj) {
-	_client = obj->getChildClient(getModuleName());
+	_client = MQTTClientPtr(obj->getChildClient(getModuleName()));
 }
 
 void MQTTValueAbs::pinMode(uint8_t pin, uint8_t mode) {

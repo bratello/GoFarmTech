@@ -23,7 +23,7 @@ class MQTTPlugin : public Runnable, public Loggable, public Descriptable {
 	LOGGABLE(MQTTPlugin)
 protected:
 	typedef		std::list<MQTTValueAbs*>	mqtt_values_t;
-	MQTTClient*			_client;
+	MQTTClientPtr		_client;
 	mqtt_values_t		_values;
 
 	TimerValue			_timer;

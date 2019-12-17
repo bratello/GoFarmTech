@@ -7,6 +7,7 @@
 #include	<Client.h>
 #include	<functional>
 #include	<map>
+#include	<memory>
 #include	"Loggable.h"
 #include	"Runnable.h"
 #include 	"Descriptable.h"
@@ -69,4 +70,5 @@ std::function<void (const T&)> make_subscriber(const C& cb) {
 	return std::function<void (const T&)>(cb);
 }
 
+typedef std::unique_ptr<MQTTClient>		MQTTClientPtr;
 #endif

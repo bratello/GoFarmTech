@@ -7,7 +7,7 @@ MQTTNetworkPlugin::MQTTNetworkPlugin() : MQTTPlugin() {}
 
 void	MQTTNetworkPlugin::setup() {
 	setupLogs();
-	_client = MQTTClient::instance(	netManager.getClient() );
+	_client = MQTTClientPtr(MQTTClient::instance(netManager.getClient()));
 	delay(10);
 
 	netManager.connect();

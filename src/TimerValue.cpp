@@ -10,7 +10,7 @@ TimerValue::TimerValue() : MQTTTimeValue_t(), _onChangeHandle(0) {
 void	TimerValue::setup() {
 	Observable::cleaup();
 	for(auto it : _tasks) {
-		it.second->setClient(_client);
+		it.second->setClient(_client.get());
 		it.second->setup();
 	}
 	if(_onChangeHandle) {

@@ -14,7 +14,7 @@
 class MQTTValueAbs : public Runnable, public Descriptable, public Loggable {
 	LOGGABLE(MQTTValueAbs)
 protected:
-	MQTTClient*		_client;
+	MQTTClientPtr	_client;
 
 	virtual String		getAttributeFullName(const String& attrName);
 	String 		loadAttributeStr(const String& attrName);
