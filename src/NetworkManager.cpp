@@ -46,6 +46,9 @@ bool    NetworkManager::disconnect() {
 }
 
 bool    NetworkManager::isConnected() {
+#if defined(UNIT_TEST)
+	return true;
+#endif
     return (WiFi.getMode() & WIFI_STA) && WiFi.status() == WL_CONNECTED;
 }
 

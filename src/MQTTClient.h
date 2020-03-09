@@ -27,8 +27,6 @@ payload_callback_t	make_callback(const std::function<void (const T&)>& callback)
 class MQTTClient : public Loggable, public Runnable, public MQTTClientTransmitter {
 	LOGGABLE(MQTTClient)
 protected:
-
-protected:
 	MQTTClient();
 	virtual void 	doSubscribe(const String& topic, const payload_callback_t& callback) = 0;
 	virtual void	doPublish(const String& topic, const String& value) = 0;
